@@ -43,8 +43,10 @@ const store = useAppStore()
 const ruleFormRef = ref<FormInstance>()
 
 const ruleForm = reactive({
-  account: 'admin',
-  password: 'admin123',
+  // account: 'admin',
+  // password: 'admin123',
+  account: '',
+  password: '',
 })
 
 const rules = reactive<FormRules>({
