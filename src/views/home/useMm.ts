@@ -78,7 +78,7 @@ class Mm {
       // value: null,
     }
     if (type === 1) {
-      transaction.data = contract.methods.addFreeAllowlist(list).encodeABI()
+      transaction.data = contract.methods.addFreeAllowList(list).encodeABI()
     } else {
       // transaction.value = amountWei
       transaction.data = contract.methods.addFeeAllowList(list).encodeABI()
