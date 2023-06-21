@@ -37,6 +37,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
+import CryptoJS from 'crypto-js'
 import { adminLogin } from '@/api'
 import { useAppStore } from '@/store/modules/app'
 const store = useAppStore()
@@ -64,16 +65,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate(async (valid) => {
     if (valid) {
-      // 创建一个SHA-256哈希对象
-      const sha256Hash = crypto.subtle.digest(
-        'SHA-256',
-        new TextEncoder().encode(ruleForm.password),
-      )
-
-      // 将哈希结果转换为16进制字符串
-      const hashedPassword = Array.from(new Uint8Array(await sha256Hash))
-        .map((b) => b.toString(16).padStart(2, '0'))
-        .join('')
+      const hashedPassword = CryptoJS.SHA256(ruleForm.password).toString()
       const res = await adminLogin({
         account: ruleForm.account,
         password: hashedPassword,
