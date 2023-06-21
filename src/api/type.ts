@@ -21,3 +21,12 @@ export interface whiteListResponseData {
   totalCount: number
   whiteList: string[]
 }
+export interface nftSetDetailResponse {
+  nftSetId: number
+  nftSetName: string
+  contractAddress: string
+  totalSupply: number
+  lastHourMintCount: number
+  mintPrice: number
+  nftDetail: string
+}

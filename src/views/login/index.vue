@@ -39,9 +39,6 @@ import { reactive, ref } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import { adminLogin } from '@/api'
 import { useAppStore } from '@/store/modules/app'
-import { useRouter } from 'vue-router'
-const router = useRouter()
-console.log('router', router)
 const store = useAppStore()
 const ruleFormRef = ref<FormInstance>()
 
@@ -80,7 +77,6 @@ const submitForm = (formEl: FormInstance | undefined) => {
         password: hashedPassword,
       })
       store.setToken(res.data.token)
-      router.push('/')
     } else {
       console.log('error submit!')
       return false

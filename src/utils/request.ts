@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
-import { useRouter } from 'vue-router'
+import router from '@/router'
 
 //创建axios实例
 const request = axios.create({
@@ -27,6 +27,7 @@ request.interceptors.response.use(
       type: 'warning',
       message: response.data?.message,
     })
+    router.push('/login')
     return response.data
   },
   (error) => {
