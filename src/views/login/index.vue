@@ -26,7 +26,7 @@
             type="primary"
             @click="submitForm(ruleFormRef)"
           >
-            登 陆
+            登 录
           </el-button>
         </el-form-item>
       </el-form>
