@@ -54,6 +54,7 @@ request.interceptors.response.use(
       type: 'error',
       message: msg,
     })
+    router.push('/login')
     return Promise.reject(error)
   },
 )
