@@ -25,18 +25,6 @@
                   />
                 </el-select>
               </el-form-item>
-              <el-form-item label="类型">
-                <el-select
-                  v-model="query.whiteListType"
-                  placeholder="白名单类型"
-                >
-                  <el-option label="免费mint白名单" :value="1" />
-                  <el-option label="付费mint白名单" :value="0" />
-                </el-select>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" @click="getWhiteList">搜索</el-button>
-              </el-form-item>
               <el-form-item>
                 <el-button type="success" @click="handleAdd">
                   新增白名单
@@ -50,11 +38,10 @@
             </el-form>
           </div>
           <el-card style="margin-top: 12px">
-            <template #header>
-              <div class="card-header">
-                <span>白名单地址</span>
-              </div>
-            </template>
+            <el-tabs v-model="query.whiteListType" @tab-change="getWhiteList">
+              <el-tab-pane label="免费mint白名单" :name="1"></el-tab-pane>
+              <el-tab-pane label="付费mint白名单" :name="0"></el-tab-pane>
+            </el-tabs>
             <div class="white-list">
               <p v-for="item in whiteListData" :key="item">{{ item }}</p>
             </div>
@@ -71,7 +58,7 @@
             <p>支持批量输入白名单地址，不同地址用英文逗号（,）分开</p>
             <el-select
               style="margin-top: 12px"
-              v-model="query.whiteListType"
+              v-model="whiteListType"
               placeholder="白名单类型"
             >
               <el-option label="免费mint白名单" :value="1" />
@@ -102,7 +89,7 @@
 import { whiteList, nftSetList, refresh, nftDetail } from '@/api'
 import { h, onMounted, ref } from 'vue'
 import { InftSetList, nftSetDetailResponse } from '@/api/type'
-import { ElLoading, ElMessageBox } from 'element-plus'
+import { ElLoading, ElMessageBox, ElMessage } from 'element-plus'
 const query = ref({
   nftSetId: 0,
   whiteListType: 1,
@@ -173,6 +160,7 @@ import Mm from './useMm'
 // 新增白名单
 const dialogFormVisible = ref(false)
 const freeAllowlist = ref('')
+const whiteListType = ref(1)
 // const freeAllowlist = ref('0xc6Bd1647e5e1176f911bc738E4318CBA4928E129')
 let MM: any
 const handleAdd = () => {
@@ -182,13 +170,12 @@ const handleAdd = () => {
 const handleConfirm = () => {
   if (!MM.userAdderss || MM.error) return
   const list = freeAllowlist.value.split(',')
-  if (!list.length) {
-    return
-    // message.error('请输入白名单地址')
+  if (!list.length || freeAllowlist.value.trim() === '') {
+    return ElMessage.error('请输入白名单地址')
   }
   MM.freeAllow(
     nftDetailData.value,
-    query.value.whiteListType,
+    whiteListType.value,
     list,
     (hash: string) => {
       dialogFormVisible.value = false

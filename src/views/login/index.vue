@@ -18,6 +18,7 @@
             v-model="ruleForm.password"
             type="password"
             autocomplete="off"
+            @keyup.enter="submitForm(ruleFormRef)"
           />
         </el-form-item>
         <el-form-item label-width="0">

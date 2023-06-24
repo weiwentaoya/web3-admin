@@ -64,6 +64,7 @@ class Mm {
     list: string | number[],
     fn: (arg0: string) => void,
   ) {
+    debugger
     if (this.userAdderss === undefined) {
       return
     }
