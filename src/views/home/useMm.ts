@@ -58,13 +58,12 @@ class Mm {
     })
     // ElMessage.success('当前钱包余额:' + balance)
   }
-  freeAllow(
+  async freeAllow(
     nft: any,
     type: number,
     list: string | number[],
     fn: (arg0: string) => void,
   ) {
-    debugger
     if (this.userAdderss === undefined) {
       return
     }
@@ -84,20 +83,26 @@ class Mm {
       // transaction.value = amountWei
       transaction.data = contract.methods.addFeeAllowList(list).encodeABI()
     }
-    this.web3.eth
-      .sendTransaction(transaction)
-      .on('transactionHash', function (hash: any) {
-        console.info('transactionHash', hash)
-        fn(hash)
-      })
-      .on('error', (err: any) => {
-        console.info('error', err)
-        ElMessage.error(err.message)
-      })
-      .catch((err: any) => {
-        console.info('catch')
-        ElMessage.error(err.message)
-      })
+    try {
+      const gas = await this.web3.eth.estimateGas(transaction)
+      this.web3.eth
+        .sendTransaction({ ...transaction, gas })
+        .on('transactionHash', function (hash: any) {
+          console.info('transactionHash', hash)
+          fn(hash)
+        })
+        .on('error', (err: any) => {
+          console.info('error', err)
+          ElMessage.error(err.message)
+        })
+        .catch((err: any) => {
+          console.info('catch')
+          ElMessage.error(err.message)
+        })
+    } catch (error: any) {
+      console.log('error', error)
+      ElMessage.error(error)
+    }
   }
   static instance: Mm
   static getInstance() {
