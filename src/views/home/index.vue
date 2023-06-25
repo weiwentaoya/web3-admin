@@ -6,12 +6,12 @@
         <el-menu default-active="1" class="el-menu-vertical-demo">
           <el-menu-item index="1">
             <el-icon><icon-menu /></el-icon>
-            <span>FreeMint白名单</span>
+            <span>白名单</span>
           </el-menu-item>
         </el-menu>
       </el-aside>
       <el-container>
-        <el-header>FreeMint 白名单</el-header>
+        <el-header>白名单</el-header>
         <el-main>
           <div>
             <el-form :inline="true">
