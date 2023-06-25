@@ -62,16 +62,11 @@ class Mm {
     list: string | number[],
     fn: (arg0: string) => void,
   ) {
-    let userAdderss = await this.web3.eth.getAccounts()
-    if (userAdderss.length === 0) {
-      userAdderss = await window.ethereum.enable()
-    }
     const toAddress = nft.contractAddress
     // const amountWei = this.web3.utils.toWei(nft.mintPrice * 0.0001, 'ether')
     const contractABI = JSON.parse(atob(nft.contractABI))
     const contract = new this.web3.eth.Contract(contractABI, toAddress)
     const transaction = {
-      from: userAdderss[0],
       to: toAddress,
       data: null,
       // value: null,
@@ -83,9 +78,16 @@ class Mm {
       transaction.data = contract.methods.addFeeAllowList(list).encodeABI()
     }
     try {
-      const gas = await this.web3.eth.estimateGas(transaction)
+      let userAdderss = await this.web3.eth.getAccounts()
+      if (userAdderss.length === 0) {
+        userAdderss = await window.ethereum.enable()
+      }
+      const gas = await this.web3.eth.estimateGas({
+        ...transaction,
+        from: userAdderss[0],
+      })
       this.web3.eth
-        .sendTransaction({ ...transaction, gas })
+        .sendTransaction({ ...transaction, from: userAdderss[0], gas })
         .on('transactionHash', function (hash: any) {
           console.info('transactionHash', hash)
           fn(hash)

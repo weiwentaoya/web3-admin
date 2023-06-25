@@ -168,7 +168,7 @@ const handleAdd = () => {
   MM = Mm.getInstance()
 }
 const handleConfirm = () => {
-  if (!MM.userAdderss || MM.error) return
+  if (!MM || MM.error) return
   const list = freeAllowlist.value.split(',')
   if (!list.length || freeAllowlist.value.trim() === '') {
     return ElMessage.error('请输入白名单地址')
