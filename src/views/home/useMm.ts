@@ -8,7 +8,6 @@ declare global {
 }
 class Mm {
   web3: any = null // web3实例
-  userAdderss = '' // 用户地址
   error: string | undefined // 错误信息
 
   constructor() {
@@ -21,10 +20,8 @@ class Mm {
     this.error = undefined
     if (typeof window.ethereum !== 'undefined') {
       const res = await window.ethereum.enable()
-      this.userAdderss = res[0]
-
+      console.log('当前钱包地址:' + res[0])
       this.web3 = new Web3(window.ethereum)
-      // alert('当前钱包地址:' + res[0])
       this.web3.eth.getAccounts(function (error: any, result: any) {
         if (!error) console.log(result) //授权成功后result能正常获取到账号了
       })
@@ -35,10 +32,11 @@ class Mm {
   }
   // 查询钱包ETH余额
   async getBalance() {
-    if (this.userAdderss === undefined) {
-      return
+    let userAdderss = await this.web3.eth.getAccounts()
+    if (userAdderss.length === 0) {
+      userAdderss = await window.ethereum.enable()
     }
-    const res = await this.web3.eth.getBalance(this.userAdderss)
+    const res = await this.web3.eth.getBalance(userAdderss[0])
     const balance = this.web3.utils.fromWei(res, 'ether')
     ElMessage.success('当前钱包余额:' + balance)
   }
@@ -64,15 +62,16 @@ class Mm {
     list: string | number[],
     fn: (arg0: string) => void,
   ) {
-    if (this.userAdderss === undefined) {
-      return
+    let userAdderss = await this.web3.eth.getAccounts()
+    if (userAdderss.length === 0) {
+      userAdderss = await window.ethereum.enable()
     }
     const toAddress = nft.contractAddress
     // const amountWei = this.web3.utils.toWei(nft.mintPrice * 0.0001, 'ether')
     const contractABI = JSON.parse(atob(nft.contractABI))
     const contract = new this.web3.eth.Contract(contractABI, toAddress)
     const transaction = {
-      from: this.userAdderss,
+      from: userAdderss[0],
       to: toAddress,
       data: null,
       // value: null,
