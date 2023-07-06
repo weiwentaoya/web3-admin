@@ -97,12 +97,12 @@ class Mm {
           ElMessage.error(err.message)
         })
         .catch((err: any) => {
-          console.info('catch')
+          console.log('catch')
           ElMessage.error(err.message)
         })
     } catch (error: any) {
-      console.log('error', error)
-      ElMessage.error(error)
+      console.log('error', error.message || error)
+      ElMessage.error(error.message || error)
     }
   }
   static instance: Mm
